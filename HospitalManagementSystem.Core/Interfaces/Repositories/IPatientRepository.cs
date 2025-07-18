@@ -10,5 +10,6 @@ namespace HospitalManagementSystem.Core.Interfaces.Repositories
 		Task AddAsync(Patient patient);
 		void Update(Patient patient);
 		void Delete(Patient patient);
-	}
+        Task<long> SaveChangesAsync();
+    }
 }

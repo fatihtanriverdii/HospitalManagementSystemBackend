@@ -8,5 +8,6 @@ namespace HospitalManagementSystem.Core.Interfaces.Repositories
 		Task<IEnumerable<Registration>> ListAllAsync();
 		Task<IEnumerable<Registration>> ListByPatientIdAsync(long patientId);
 		Task AddAsync(Registration registration);
-	}
+        Task<long> SaveChangesAsync();
+    }
 }

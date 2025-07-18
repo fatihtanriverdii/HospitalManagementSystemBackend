@@ -40,5 +40,10 @@ namespace HospitalManagementSystem.Infrastructure.Repositories
 								.Where(r => r.PatientId == patientId)
 								.ToListAsync();
 		}
-	}
+
+        public async Task<long> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+    }
 }

@@ -1,25 +1,22 @@
 ﻿using HospitalManagementSystem.Core.Entities;
 using HospitalManagementSystem.Core.Interfaces.Repositories;
-using HospitalManagementSystem.Core.Interfaces.Services;
-using HospitalManagementSystem.Infrastructure.Data;
+using HospitalManagementSystem.Application.Interfaces.Services;
 
 namespace HospitalManagementSystem.Infrastructure.Services
 {
 	public class EfPatientService : IPatientService
 	{
 		private readonly IPatientRepository _patientRepo;
-		private readonly AppDbContext _context;
 
-		public EfPatientService(IPatientRepository patientRepo, AppDbContext context)
+		public EfPatientService(IPatientRepository patientRepo)
 		{
 			_patientRepo = patientRepo;
-			_context = context;
 		}
 
 		public async Task CreateAsync(Patient patient)
 		{
 			await _patientRepo.AddAsync(patient);
-			await _context.SaveChangesAsync();
+			await _patientRepo.SaveChangesAsync();
 		}
 
 		public async Task DeleteAsync(long id)
@@ -30,7 +27,7 @@ namespace HospitalManagementSystem.Infrastructure.Services
 				throw new KeyNotFoundException("Patient not found");
 			}
 			_patientRepo.Delete(patient);
-			await _context.SaveChangesAsync();
+			await _patientRepo.SaveChangesAsync();
 		}
 
 		public async Task<IEnumerable<Patient>> GetAllAsync()
@@ -51,7 +48,7 @@ namespace HospitalManagementSystem.Infrastructure.Services
 		public async Task UpdateAsync(Patient patient)
 		{
 			_patientRepo.Update(patient);
-			await _context.SaveChangesAsync();
+			await _patientRepo.SaveChangesAsync();
 		}
 	}
 }

@@ -10,5 +10,6 @@ namespace HospitalManagementSystem.Core.Interfaces.Repositories
 		void Update(Doctor doctor);
 		void Delete(Doctor doctor);
 		Task<IEnumerable<Doctor>> ListByDepartmentAsync(long departmentId);
-	}
+        Task<long> SaveChangesAsync();
+    }
 }

@@ -38,5 +38,10 @@ namespace HospitalManagementSystem.Infrastructure.Repositories
 		{
 			_context.Departments.Update(department);
 		}
-	}
+
+        public async Task<long> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+    }
 }

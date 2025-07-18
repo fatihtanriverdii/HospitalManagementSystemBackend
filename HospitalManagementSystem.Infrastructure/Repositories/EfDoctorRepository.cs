@@ -41,7 +41,12 @@ namespace HospitalManagementSystem.Infrastructure.Repositories
 								.ToListAsync();
 		}
 
-		public void Update(Doctor doctor)
+        public async Task<long> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+
+        public void Update(Doctor doctor)
 		{
 			_context.Doctors.Update(doctor);
 		}

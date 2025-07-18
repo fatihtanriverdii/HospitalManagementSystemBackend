@@ -34,7 +34,12 @@ namespace HospitalManagementSystem.Infrastructure.Repositories
 			return await _context.Users.ToListAsync();
 		}
 
-		public void Update(User user)
+        public async Task<long> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+
+        public void Update(User user)
 		{
 			_context.Users.Update(user);
 		}

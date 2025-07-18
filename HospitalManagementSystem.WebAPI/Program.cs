@@ -1,9 +1,12 @@
 using HospitalManagementSystem.Core.Interfaces.Repositories;
-using HospitalManagementSystem.Core.Interfaces.Services;
+using HospitalManagementSystem.Application.Interfaces.Services;
 using HospitalManagementSystem.Infrastructure.Data;
 using HospitalManagementSystem.Infrastructure.Repositories;
 using HospitalManagementSystem.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using HospitalManagementSystem.Application.Mappings;
+using FluentValidation.AspNetCore;
+using HospitalManagementSystem.Application.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +35,15 @@ builder.Services.AddScoped<IDoctorService, EfDoctorService>();
 builder.Services.AddScoped<IPatientService, EfPatientService>();
 builder.Services.AddScoped<IRegistrationService, EfRegistrationService>();
 builder.Services.AddScoped<IUserService, EfUserService>();
+
+// Automapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+//Validator
+builder.Services.AddControllers()
+                .AddFluentValidation(fv =>
+                    fv.RegisterValidatorsFromAssemblyContaining<PatientCreateValidator>()
+                );
 
 var app = builder.Build();
 

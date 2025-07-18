@@ -1,7 +1,6 @@
 ﻿using HospitalManagementSystem.Core.Entities;
 using HospitalManagementSystem.Core.Interfaces.Repositories;
-using HospitalManagementSystem.Core.Interfaces.Services;
-using HospitalManagementSystem.Infrastructure.Data;
+using HospitalManagementSystem.Application.Interfaces.Services;
 
 namespace HospitalManagementSystem.Infrastructure.Services
 {
@@ -9,19 +8,17 @@ namespace HospitalManagementSystem.Infrastructure.Services
 	{
 		private readonly IRegistrationRepository _registrationRepo;
 		private readonly IPatientService _patientService;
-		private readonly AppDbContext _context;
 
-		public EfRegistrationService(IRegistrationRepository registrationRepo, IPatientService patientService , AppDbContext context)
+		public EfRegistrationService(IRegistrationRepository registrationRepo, IPatientService patientService)
 		{
 			_registrationRepo = registrationRepo;
 			_patientService = patientService;
-			_context = context;
 		}
 
 		public async Task CreateAsync(Registration registration)
 		{
 			await _registrationRepo.AddAsync(registration);
-			await _context.SaveChangesAsync();
+			await _registrationRepo.SaveChangesAsync();
 		}
 
 		public async Task<IEnumerable<Registration>> GetAllAsync()

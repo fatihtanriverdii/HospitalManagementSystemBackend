@@ -1,6 +1,6 @@
 ﻿using HospitalManagementSystem.Core.Entities;
 
-namespace HospitalManagementSystem.Core.Interfaces.Services
+namespace HospitalManagementSystem.Application.Interfaces.Services
 {
 	public interface IUserService
 	{

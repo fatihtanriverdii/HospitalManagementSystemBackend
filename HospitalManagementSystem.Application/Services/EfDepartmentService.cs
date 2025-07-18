@@ -1,25 +1,22 @@
 ﻿using HospitalManagementSystem.Core.Entities;
 using HospitalManagementSystem.Core.Interfaces.Repositories;
-using HospitalManagementSystem.Core.Interfaces.Services;
-using HospitalManagementSystem.Infrastructure.Data;
+using HospitalManagementSystem.Application.Interfaces.Services;
 
 namespace HospitalManagementSystem.Infrastructure.Services
 {
 	public class EfDepartmentService : IDepartmentService
 	{
 		private readonly IDepartmentRepository _departmentRepo;
-		private readonly AppDbContext _context;
 
-		public EfDepartmentService(IDepartmentRepository departmentRepo, AppDbContext context)
+		public EfDepartmentService(IDepartmentRepository departmentRepo)
 		{
 			_departmentRepo = departmentRepo;
-			_context = context;
 		}
 
 		public async Task CreateAsync(Department department)
 		{
 			await _departmentRepo.AddAsync(department);
-			await _context.SaveChangesAsync();
+			await _departmentRepo.SaveChangesAsync();
 		}
 
 		public async Task DeleteAsync(long id)
@@ -30,7 +27,7 @@ namespace HospitalManagementSystem.Infrastructure.Services
 				throw new KeyNotFoundException("Department not found");
 			}
 			_departmentRepo.Delete(department);
-			await _context.SaveChangesAsync();
+			await _departmentRepo.SaveChangesAsync();
 		}
 
 		public async Task<IEnumerable<Department>> GetAllAsync()
@@ -46,7 +43,7 @@ namespace HospitalManagementSystem.Infrastructure.Services
 		public async Task UpdateAsync(Department department)
 		{
 			_departmentRepo.Update(department);
-			await _context.SaveChangesAsync();
+			await _departmentRepo.SaveChangesAsync();
 		}
 	}
 }
