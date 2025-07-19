@@ -23,8 +23,69 @@ namespace HospitalManagementSystem.Infrastructure.Data
 				.WithMany(dep => dep.Doctors)
 				.HasForeignKey(d => d.DepartmentId);
 
-			//Registration
-			modelBuilder.Entity<Registration>()
+            //Department
+            modelBuilder.Entity<Department>().HasData(
+                new Department { Id = 1, Name = "Acil Servis" },
+                new Department { Id = 2, Name = "Ağız ve Diş Sağlığı" },
+                new Department { Id = 3, Name = "Aile Hekimliği" },
+                new Department { Id = 4, Name = "Anesteziyoloji ve Reanimasyon" },
+                new Department { Id = 5, Name = "Beyin ve Sinir Cerrahisi" },
+                new Department { Id = 6, Name = "Biyokimya" },
+                new Department { Id = 7, Name = "Çocuk Alerjisi" },
+                new Department { Id = 8, Name = "Çocuk Cerrahisi" },
+                new Department { Id = 9, Name = "Çocuk Endokrinolojisi" },
+                new Department { Id = 10, Name = "Çocuk Gastroenterolojisi" },
+                new Department { Id = 11, Name = "Çocuk Hematolojisi" },
+                new Department { Id = 12, Name = "Çocuk Kardiyolojisi" },
+                new Department { Id = 13, Name = "Çocuk Nefrolojisi" },
+                new Department { Id = 14, Name = "Çocuk Nörolojisi" },
+                new Department { Id = 15, Name = "Çocuk Onkolojisi" },
+                new Department { Id = 16, Name = "Çocuk Psikiyatrisi" },
+                new Department { Id = 17, Name = "Çocuk Sağlığı ve Hastalıkları" },
+                new Department { Id = 18, Name = "Çocuk Ürolojisi" },
+                new Department { Id = 19, Name = "Cildiye" },
+                new Department { Id = 20, Name = "Dahiliye" },
+                new Department { Id = 21, Name = "Dermatoloji" },
+                new Department { Id = 22, Name = "Endokrinoloji ve Metabolizma" },
+                new Department { Id = 23, Name = "Enfeksiyon Hastalıkları" },
+                new Department { Id = 24, Name = "Fizik Tedavi ve Rehabilitasyon" },
+                new Department { Id = 25, Name = "Gastroenteroloji" },
+                new Department { Id = 26, Name = "Genel Cerrahi" },
+                new Department { Id = 27, Name = "Geriatri" },
+                new Department { Id = 28, Name = "Göz Hastalıkları" },
+                new Department { Id = 29, Name = "Göğüs Cerrahisi" },
+                new Department { Id = 30, Name = "Göğüs Hastalıkları" },
+                new Department { Id = 31, Name = "Hematoloji" },
+                new Department { Id = 32, Name = "İmmünoloji" },
+                new Department { Id = 33, Name = "Kadın Hastalıkları ve Doğum" },
+                new Department { Id = 34, Name = "Kalp ve Damar Cerrahisi" },
+                new Department { Id = 35, Name = "Kardiyoloji" },
+                new Department { Id = 36, Name = "Kulak Burun Boğaz" },
+                new Department { Id = 37, Name = "Nefroloji" },
+                new Department { Id = 38, Name = "Neonatoloji" },
+                new Department { Id = 39, Name = "Nöroloji" },
+                new Department { Id = 40, Name = "Nükleer Tıp" },
+                new Department { Id = 41, Name = "Onkoloji" },
+                new Department { Id = 42, Name = "Ortopedi ve Travmatoloji" },
+                new Department { Id = 43, Name = "Patoloji" },
+                new Department { Id = 44, Name = "Plastik, Rekonstrüktif ve Estetik Cerrahi" },
+                new Department { Id = 45, Name = "Psikiyatri" },
+                new Department { Id = 46, Name = "Psikoloji" },
+                new Department { Id = 47, Name = "Radyasyon Onkolojisi" },
+                new Department { Id = 48, Name = "Radyoloji" },
+                new Department { Id = 49, Name = "Romatoloji" },
+                new Department { Id = 50, Name = "Ruh Sağlığı ve Hastalıkları" },
+                new Department { Id = 51, Name = "Spor Hekimliği" },
+                new Department { Id = 52, Name = "Tıbbi Genetik" },
+                new Department { Id = 53, Name = "Tıbbi Mikrobiyoloji" },
+                new Department { Id = 54, Name = "Tıbbi Onkoloji" },
+                new Department { Id = 55, Name = "Üroloji" },
+                new Department { Id = 56, Name = "Yenidoğan Yoğun Bakım" },
+                new Department { Id = 57, Name = "Yoğun Bakım" }
+            );
+
+            //Registration
+            modelBuilder.Entity<Registration>()
 				.HasKey(r =>  r.Id);
 			modelBuilder.Entity<Registration>()
 				.HasOne(r => r.Patient)

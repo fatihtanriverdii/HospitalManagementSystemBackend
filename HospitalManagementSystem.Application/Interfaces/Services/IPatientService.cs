@@ -1,14 +1,17 @@
-﻿using HospitalManagementSystem.Core.Entities;
+﻿using HospitalManagementSystem.Application.DTOs;
+using HospitalManagementSystem.Core.Entities;
 
 namespace HospitalManagementSystem.Application.Interfaces.Services
 {
 	public interface IPatientService
 	{
-		Task<Patient> GetByIdAsync(long id);
+		Task<PatientDto> GetByIdAsync(long id);
 		Task<Patient> GetByTCAsync(string tc);
-		Task<IEnumerable<Patient>> GetAllAsync();
-		Task CreateAsync(Patient patient);
+		Task<List<PatientDto>> GetAllAsync();
+		Task<PatientDto> CreateAsync(PatientCreateDto patientCreateDto);
 		Task UpdateAsync(Patient patient);
 		Task DeleteAsync(long id);
-	}
+		Task<bool> CheckTCExistAsync(string tc);
+
+    }
 }

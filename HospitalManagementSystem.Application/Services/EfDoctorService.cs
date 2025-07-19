@@ -1,22 +1,29 @@
 ﻿using HospitalManagementSystem.Core.Entities;
 using HospitalManagementSystem.Core.Interfaces.Repositories;
 using HospitalManagementSystem.Application.Interfaces.Services;
+using HospitalManagementSystem.Application.DTOs;
+using AutoMapper;
 
 namespace HospitalManagementSystem.Infrastructure.Services
 {
 	public class EfDoctorService : IDoctorService
 	{
 		private readonly IDoctorRepository _doctorRepo;
+		private readonly IMapper _mapper;
 
-		public EfDoctorService(IDoctorRepository doctorRepository)
+		public EfDoctorService(IDoctorRepository doctorRepository, IMapper mapper)
 		{
 			_doctorRepo = doctorRepository;
+			_mapper = mapper;
 		}
 
-		public async Task CreateAsync(Doctor doctor)
+		public async Task<DoctorDto> CreateAsync(DoctorCreateDto doctorCreateDto)
 		{
+			var doctor = _mapper.Map<Doctor>(doctorCreateDto);
 			await _doctorRepo.AddAsync(doctor);
 			await _doctorRepo.SaveChangesAsync();
+
+			return _mapper.Map<DoctorDto>(doctor);
 		}
 
 		public async Task DeleteAsync(long id)
@@ -40,9 +47,12 @@ namespace HospitalManagementSystem.Infrastructure.Services
 			return await _doctorRepo.ListByDepartmentAsync(departmentId);
 		}
 
-		public async Task<Doctor> GetByIdAsync(long id)
+		public async Task<DoctorDto> GetByIdAsync(long id)
 		{
-			return await _doctorRepo.GetByIdAsync(id);
+			var doctor = await _doctorRepo.GetByIdAsync(id);
+			if (doctor == null)
+				return null;
+			return _mapper.Map<DoctorDto>(doctor);
 		}
 
 		public async Task UpdateAsync(Doctor doctor)

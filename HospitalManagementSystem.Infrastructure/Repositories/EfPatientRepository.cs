@@ -19,7 +19,12 @@ namespace HospitalManagementSystem.Infrastructure.Repositories
 			await _context.Patients.AddAsync(patient);
 		}
 
-		public void Delete(Patient patient)
+        public IQueryable<Patient> AsQueryable()
+        {
+			return _context.Patients;
+        }
+
+        public void Delete(Patient patient)
 		{
 			_context.Patients.Remove(patient);
 		}
