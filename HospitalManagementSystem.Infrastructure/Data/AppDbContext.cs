@@ -10,7 +10,7 @@ namespace HospitalManagementSystem.Infrastructure.Data
 		public DbSet<Department> Departments { get; set; } = null!;
 		public DbSet<Doctor> Doctors { get; set; } = null!;
 		public DbSet<Patient> Patients { get; set; } = null!;
-		public DbSet<Registration> Registrations { get; set; } = null!;
+		public DbSet<Appointment> Appointments { get; set; } = null!;
 		public DbSet<User> Users { get; set; } = null!;
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,6 +22,18 @@ namespace HospitalManagementSystem.Infrastructure.Data
 				.HasOne(d => d.Department)
 				.WithMany(dep => dep.Doctors)
 				.HasForeignKey(d => d.DepartmentId);
+
+            //Doctor - WorkingHour
+            modelBuilder.Entity<Doctor>()
+                .HasMany(d => d.WorkHours)
+                .WithOne(w => w.Doctor)
+                .HasForeignKey(w => w.DoctorId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //Doktorun aynı güne ait sadece bir kayıt olmasi icin
+            modelBuilder.Entity<DoctorWorkingHour>()
+                .HasIndex(w => new { w.DoctorId, w.DayOfWeek })
+                .IsUnique();
 
             //Department
             modelBuilder.Entity<Department>().HasData(
@@ -84,23 +96,27 @@ namespace HospitalManagementSystem.Infrastructure.Data
                 new Department { Id = 57, Name = "Yoğun Bakım" }
             );
 
-            //Registration
-            modelBuilder.Entity<Registration>()
+            //Appointment
+            modelBuilder.Entity<Appointment>()
 				.HasKey(r =>  r.Id);
-			modelBuilder.Entity<Registration>()
+			modelBuilder.Entity<Appointment>()
 				.HasOne(r => r.Patient)
-				.WithMany(p => p.Registrations)
+				.WithMany(p => p.Appointments)
 				.HasForeignKey(r => r.PatientId);
-			modelBuilder.Entity<Registration>()
+			modelBuilder.Entity<Appointment>()
 				.HasOne(r => r.Doctor)
-				.WithMany(d => d.Registrations)
+				.WithMany(d => d.Appointments)
 				.HasForeignKey(r => r.DoctorId);
-			modelBuilder.Entity<Registration>()
+			modelBuilder.Entity<Appointment>()
 				.Property(r => r.CreatedAt)
 				.HasDefaultValueSql("NOW()");
+            modelBuilder.Entity<Appointment>()
+                .Property(a => a.Status)
+                .HasConversion<string>()
+                .HasMaxLength(20);
 
-			//User.Role
-			modelBuilder.Entity<User>()
+            //User.Role
+            modelBuilder.Entity<User>()
 				.Property(u => u.Role)
 				.HasConversion<string>()
 				.HasMaxLength(20);

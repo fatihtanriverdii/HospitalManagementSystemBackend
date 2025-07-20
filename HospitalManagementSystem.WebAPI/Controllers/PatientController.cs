@@ -39,10 +39,32 @@ namespace HospitalManagementSystem.WebAPI.Controllers
             });
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("id/{id}")]
         public async Task<ActionResult<ResponseDto<PatientDto>>> GetById(long id)
         {
             var patient = await _patientService.GetByIdAsync(id);
+            if (patient == null)
+            {
+                return NotFound(
+                    new ResponseDto<PatientDto>
+                    {
+                        Success = false,
+                        Data = null,
+                        Message = "Kayitli hasta bulunamdi."
+                    });
+            }
+            return Ok(new ResponseDto<PatientDto>
+            {
+                Success = true,
+                Data = patient,
+                Message = "Hasta basariyla getirildi."
+            });
+        }
+
+        [HttpGet("tc/{tc}")]
+        public async Task<ActionResult<ResponseDto<PatientDto>>> GetByTc(string tc)
+        {
+            var patient = await _patientService.GetByTCAsync(tc);
             if (patient == null)
             {
                 return NotFound(

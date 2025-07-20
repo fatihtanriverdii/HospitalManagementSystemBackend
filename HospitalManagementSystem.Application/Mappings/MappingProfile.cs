@@ -12,8 +12,9 @@ namespace HospitalManagementSystem.Application.Mappings
             CreateMap<Patient, PatientCreateDto>();
             CreateMap<Patient, PatientDto>();
 
-            CreateMap<RegistrationCreateDto, Registration>();
-            CreateMap<Registration, RegistrationCreateDto>();
+            CreateMap<AppointmentCreateDto, Appointment>();
+            CreateMap<Appointment, AppointmentCreateDto>();
+            CreateMap<Appointment, AppointmentDto>();
 
             CreateMap<DoctorCreateDto, Doctor>();
             CreateMap<Doctor, DoctorCreateDto>();

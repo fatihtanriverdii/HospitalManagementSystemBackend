@@ -22,6 +22,6 @@ namespace HospitalManagementSystem.Core.Entities
 		[Column(TypeName = "varchar(100)")]
 		public string Address { get; set; } = null!;
 
-		public ICollection<Registration> Registrations { get; set; } = new List<Registration>();
+		public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 	}
 }

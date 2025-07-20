@@ -56,14 +56,16 @@ namespace HospitalManagementSystem.Infrastructure.Services
 			var patient = await _patientRepo.GetByIdAsync(id);
 			if (patient == null)
 				return null;
-			var patientDto = _mapper.Map<PatientDto>(patient);
-			return patientDto;
+			return _mapper.Map<PatientDto>(patient);
 		}
 
-		public async Task<Patient> GetByTCAsync(string tc)
+		public async Task<PatientDto> GetByTCAsync(string tc)
 		{
-			return await _patientRepo.GetByTCAsync(tc);
-		}
+			var patient = await _patientRepo.GetByTCAsync(tc);
+            if (patient == null)
+                return null;
+            return _mapper.Map<PatientDto>(patient);
+        }
 
 		public async Task UpdateAsync(Patient patient)
 		{

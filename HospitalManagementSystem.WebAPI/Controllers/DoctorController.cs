@@ -21,7 +21,8 @@ namespace HospitalManagementSystem.WebAPI.Controllers
         {
             var created = await _doctorService.CreateAsync(doctorCreateDto);
 
-            return CreatedAtAction(nameof(GetById), new {id = created.Id},
+            return CreatedAtAction(nameof(GetById),
+                new {id = created.Id},
                 new ResponseDto<DoctorDto>
                 {
                     Success = true,
@@ -31,7 +32,7 @@ namespace HospitalManagementSystem.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<DoctorDto>> GetById(long id)
+        public async Task<ActionResult<ResponseDto<DoctorDto>>> GetById(long id)
         {
             var doctor = await _doctorService.GetByIdAsync(id);
 

@@ -6,7 +6,7 @@ namespace HospitalManagementSystem.Application.Interfaces.Services
 	public interface IPatientService
 	{
 		Task<PatientDto> GetByIdAsync(long id);
-		Task<Patient> GetByTCAsync(string tc);
+		Task<PatientDto> GetByTCAsync(string tc);
 		Task<List<PatientDto>> GetAllAsync();
 		Task<PatientDto> CreateAsync(PatientCreateDto patientCreateDto);
 		Task UpdateAsync(Patient patient);

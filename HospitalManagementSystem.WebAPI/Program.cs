@@ -22,18 +22,32 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
  );
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        builder =>
+        {
+            builder
+            .WithOrigins("http://192.168.1.111:3000", "http://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+            //.SetIsOriginAllowed(origin => true);
+        });
+});
+
 //Repos
 builder.Services.AddScoped<IDepartmentRepository, EfDepartmentRepository>();
 builder.Services.AddScoped<IDoctorRepository, EfDoctorRepository>();
 builder.Services.AddScoped<IPatientRepository, EfPatientRepository>();
-builder.Services.AddScoped<IRegistrationRepository, EfRegistrationRepository>();
+builder.Services.AddScoped<IAppointmentRepository, EfAppointmentRepository>();
 builder.Services.AddScoped<IUserRepository, EfUserRepository>();
 
 //Services
 builder.Services.AddScoped<IDepartmentService, EfDepartmentService>();
 builder.Services.AddScoped<IDoctorService, EfDoctorService>();
 builder.Services.AddScoped<IPatientService, EfPatientService>();
-builder.Services.AddScoped<IRegistrationService, EfRegistrationService>();
+builder.Services.AddScoped<IAppointmentService, EfAppointmentService>();
 builder.Services.AddScoped<IUserService, EfUserService>();
 
 // Automapper
@@ -53,6 +67,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 
