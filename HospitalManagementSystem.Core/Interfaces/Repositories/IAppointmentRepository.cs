@@ -6,9 +6,10 @@ namespace HospitalManagementSystem.Core.Interfaces.Repositories
 	{
 		Task<Appointment> GetByIdAsync(long id);
 		Task<IEnumerable<Appointment>> ListAllAsync();
-		Task<IEnumerable<Appointment>> ListByPatientIdAsync(long patientId);
 		Task AddAsync(Appointment registration);
-        Task<List<Appointment>> ListByDoctorAndDateAsync(long doctorId, DateOnly dateOnly);
+		Task<List<Appointment>> ListAllByPatientIdAsync(long patientId);
+		IQueryable<Appointment> QueryByPatient(long patientId);
+        Task<List<Appointment>> ListAllByDoctorAndDateAsync(long doctorId, DateOnly dateOnly);
         Task<long> SaveChangesAsync();
     }
 }

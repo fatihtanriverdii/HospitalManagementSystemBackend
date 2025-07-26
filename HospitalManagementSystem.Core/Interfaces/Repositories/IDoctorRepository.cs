@@ -9,7 +9,9 @@ namespace HospitalManagementSystem.Core.Interfaces.Repositories
 		Task AddAsync(Doctor doctor);
 		void Update(Doctor doctor);
 		void Delete(Doctor doctor);
-		Task<IEnumerable<Doctor>> ListByDepartmentAsync(long departmentId);
+		Task<List<TimeSlot>> ListAvailableTimeSlotsAsync(List<TimeSlot> busySlots);
+
+        Task<IEnumerable<Doctor>> ListByDepartmentAsync(long departmentId);
         Task<long> SaveChangesAsync();
     }
 }

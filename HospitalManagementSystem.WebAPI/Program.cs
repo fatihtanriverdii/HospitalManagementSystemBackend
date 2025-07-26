@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using HospitalManagementSystem.Application.Mappings;
 using FluentValidation.AspNetCore;
 using HospitalManagementSystem.Application.Validators;
+using HospitalManagementSystem.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,7 @@ builder.Services.AddScoped<IDoctorRepository, EfDoctorRepository>();
 builder.Services.AddScoped<IPatientRepository, EfPatientRepository>();
 builder.Services.AddScoped<IAppointmentRepository, EfAppointmentRepository>();
 builder.Services.AddScoped<IUserRepository, EfUserRepository>();
+builder.Services.AddScoped<ITimeSlotRepository, EfTimeSlotRepository>();
 
 //Services
 builder.Services.AddScoped<IDepartmentService, EfDepartmentService>();
@@ -49,6 +51,7 @@ builder.Services.AddScoped<IDoctorService, EfDoctorService>();
 builder.Services.AddScoped<IPatientService, EfPatientService>();
 builder.Services.AddScoped<IAppointmentService, EfAppointmentService>();
 builder.Services.AddScoped<IUserService, EfUserService>();
+builder.Services.AddScoped<ITimeSlotService, EfTimeSlotService>();
 
 // Automapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));

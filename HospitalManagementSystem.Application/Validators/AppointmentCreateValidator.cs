@@ -15,6 +15,11 @@ namespace HospitalManagementSystem.Application.Validators
 
             RuleFor(x => x.Date)
                 .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now)).WithMessage("Kayit tarihi bugun veya bugunden sonraki bir tarih olmali");
+
+            RuleFor(x => x.Time)
+                .InclusiveBetween(new TimeOnly(8,0), new TimeOnly(17,0))
+                .Must(t => t.Minute == 0 || t.Minute == 30)
+                .WithMessage("Randevu saatleri 08:00 - 17:00 arasi sadece tam saat (00) veya bucuk saat (30) diliminde olmalidir.");
         }
     }
 }

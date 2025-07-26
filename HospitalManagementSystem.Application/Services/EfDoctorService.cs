@@ -9,11 +9,15 @@ namespace HospitalManagementSystem.Infrastructure.Services
 	public class EfDoctorService : IDoctorService
 	{
 		private readonly IDoctorRepository _doctorRepo;
+		private readonly IAppointmentService _appointmentService;
+		private readonly ITimeSlotService _timeSlotService;
 		private readonly IMapper _mapper;
 
-		public EfDoctorService(IDoctorRepository doctorRepository, IMapper mapper)
+		public EfDoctorService(IDoctorRepository doctorRepository, IAppointmentService appointmentService, ITimeSlotService timeSlotService, IMapper mapper)
 		{
 			_doctorRepo = doctorRepository;
+			_appointmentService = appointmentService;
+			_timeSlotService = timeSlotService;
 			_mapper = mapper;
 		}
 
@@ -37,14 +41,44 @@ namespace HospitalManagementSystem.Infrastructure.Services
 			await _doctorRepo.SaveChangesAsync();
 		}
 
-		public async Task<IEnumerable<Doctor>> GetAllAsync()
+		public async Task<List<DoctorDto>> GetAllAsync()
 		{
-			return await _doctorRepo.ListAllAsync();
+			var doctors = await _doctorRepo.ListAllAsync();
+			if (doctors == null)
+				return null;
+			return _mapper.Map<List<DoctorDto>>(doctors);
 		}
 
 		public async Task<IEnumerable<Doctor>> GetByDepartmentAsync(long departmentId)
 		{
 			return await _doctorRepo.ListByDepartmentAsync(departmentId);
+		}
+
+		public async Task<List<TimeSlotDto>> GetAvailableTimeSlotsAsync(long doctorId, DateOnly date)
+		{
+			var appList = await _appointmentService.GetAllByDoctorAndDateAsync(doctorId, date);
+			var timeSlots = await _timeSlotService.GetAllAsync();
+			List<TimeSlot> busyTimeSlots = new List<TimeSlot>();
+
+			foreach (var appointment in appList)
+			{
+				busyTimeSlots.Add(appointment.TimeSlot);
+			}
+
+			var availableTimeSlots = await _doctorRepo.ListAvailableTimeSlotsAsync(busyTimeSlots);
+
+			if(date == DateOnly.FromDateTime(DateTime.Now))
+			{
+				List<TimeSlot> todayAvailableTimeSlot = new List<TimeSlot>();
+				foreach (var availableTimeSlot in availableTimeSlots)
+				{
+					if (availableTimeSlot.Time > TimeOnly.FromDateTime(DateTime.Now))
+						todayAvailableTimeSlot.Add(availableTimeSlot);
+				}
+				return _mapper.Map<List<TimeSlotDto>>(todayAvailableTimeSlot);
+			}
+
+			return _mapper.Map<List<TimeSlotDto>>(availableTimeSlots);
 		}
 
 		public async Task<DoctorDto> GetByIdAsync(long id)

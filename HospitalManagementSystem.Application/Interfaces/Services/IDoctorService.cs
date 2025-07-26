@@ -6,10 +6,11 @@ namespace HospitalManagementSystem.Application.Interfaces.Services
 	public interface IDoctorService
 	{
 		Task<DoctorDto> GetByIdAsync(long id);
-        Task<IEnumerable<Doctor>> GetAllAsync();
+        Task<List<DoctorDto>> GetAllAsync();
 		Task<IEnumerable<Doctor>> GetByDepartmentAsync(long departmentId);
 		Task<DoctorDto> CreateAsync(DoctorCreateDto doctorCreateDto);
         Task UpdateAsync(Doctor doctor);
-		Task DeleteAsync(long id);
+		Task<List<TimeSlotDto>> GetAvailableTimeSlotsAsync(long doctorId, DateOnly date);
+        Task DeleteAsync(long id);
 	}
 }

@@ -46,6 +46,16 @@ namespace HospitalManagementSystem.Infrastructure.Repositories
             return await _context.SaveChangesAsync();
         }
 
+		public async Task<List<TimeSlot>> ListAvailableTimeSlotsAsync(List<TimeSlot> busySlots)
+		{
+			var busyIds = busySlots.Select(bs => bs.Id).ToList();
+
+			return await _context.TimeSlots
+							.Where(ts => !busyIds.Contains(ts.Id))
+							.OrderBy(ts => ts.Time)
+							.ToListAsync();
+		}
+
         public void Update(Doctor doctor)
 		{
 			_context.Doctors.Update(doctor);

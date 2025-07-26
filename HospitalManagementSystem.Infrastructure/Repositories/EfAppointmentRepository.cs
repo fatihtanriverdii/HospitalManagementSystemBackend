@@ -32,21 +32,29 @@ namespace HospitalManagementSystem.Infrastructure.Repositories
 								.ToListAsync();
 		}
 
-        public async Task<List<Appointment>> ListByDoctorAndDateAsync(long doctorId, DateOnly dateOnly)
+		public async Task<List<Appointment>> ListAllByPatientIdAsync(long patientId)
+		{
+			return await _context.Appointments
+								.Where(a => a.PatientId == patientId)
+								.Include(a => a.Doctor)
+								.Include(a => a.TimeSlot)
+								.OrderByDescending(a => a.Date)
+								.ToListAsync();
+		}
+
+		public IQueryable<Appointment> QueryByPatient(long patientId)
+		{
+			return _context.Appointments
+							.Where(a => a.PatientId == patientId);
+		}
+
+        public async Task<List<Appointment>> ListAllByDoctorAndDateAsync(long doctorId, DateOnly dateOnly)
         {
 			return await _context.Appointments
 								.Where(a => a.DoctorId == doctorId && a.Date == dateOnly)
+								.Include(a => a.TimeSlot)
 								.ToListAsync();
         }
-
-        public async Task<IEnumerable<Appointment>> ListByPatientIdAsync(long patientId)
-		{
-			return await _context.Appointments
-								.Include(r => r.Patient)
-								.Include(r => r.Doctor)
-								.Where(r => r.PatientId == patientId)
-								.ToListAsync();
-		}
 
         public async Task<long> SaveChangesAsync()
         {

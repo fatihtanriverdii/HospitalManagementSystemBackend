@@ -39,7 +39,7 @@ namespace HospitalManagementSystem.WebAPI.Controllers
                     Message = "Doktor bulunamadi."
                 });
 
-            bool conflick = await _appointmentService.CheckConflickAsync(appointmentCreateDto.DoctorId, appointmentCreateDto.Date, appointmentCreateDto.StartTime);
+            bool conflick = await _appointmentService.CheckConflickAsync(appointmentCreateDto.DoctorId, appointmentCreateDto.Date, appointmentCreateDto.Time);
             if (conflick)
             {
                 return Conflict(new ResponseDto<AppointmentDto>
@@ -48,25 +48,26 @@ namespace HospitalManagementSystem.WebAPI.Controllers
                     Message = "Doktor musait degil."
                 });
             }
+            Console.WriteLine(conflick);
 
-            var appt = await _appointmentService.CreateAsync(appointmentCreateDto);
+            var app = await _appointmentService.CreateAsync(appointmentCreateDto);
 
             return CreatedAtAction(nameof(GetById),
-                new { id = appt.Id},
+                new { id = app.Id},
                 new ResponseDto<AppointmentDto>
                 {
                     Success = true,
-                    Data = appt,
+                    Data = app,
                     Message = "Kayit basariyla olusturuldu."
                 });
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ResponseDto<AppointmentDto>>> GetById(long id)
         {
-            var appt = await _appointmentService.GetByIdAsync(id);
+            var app = await _appointmentService.GetByIdAsync(id);
 
-            if (appt == null)
+            if (app == null)
             {
                 return NotFound(new ResponseDto<AppointmentDto>
                 {
@@ -77,8 +78,30 @@ namespace HospitalManagementSystem.WebAPI.Controllers
             return Ok(new ResponseDto<AppointmentDto>
             {
                 Success = true,
-                Data = appt,
+                Data = app,
                 Message = "Kayit basariyla getirildi."
+            });
+        }
+
+        [HttpGet("patient/{patientId}")]
+        public async Task<ActionResult<ResponseDto<List<AppointmentHistoryDto>>>> GetByPatientId(long patientId)
+        {
+            var histories = await _appointmentService.GetAllPatientHistoryAsync(patientId);
+
+            if (!histories.Any())
+            {
+                return NotFound(new ResponseDto<AppointmentHistoryDto>
+                {
+                    Success = false,
+                    Message = "Kayitlar bulunamadi."
+                });
+            }
+                
+            return Ok(new ResponseDto<List<AppointmentHistoryDto>>
+            {
+                Success = true,
+                Data = histories,
+                Message = "Kayitlar basariyla getirildi." 
             });
         }
     }

@@ -10,10 +10,12 @@ namespace HospitalManagementSystem.WebAPI.Controllers
     public class DoctorController : ControllerBase
     {
         private readonly IDoctorService _doctorService;
+        private readonly IAppointmentService _appointmentService;
 
-        public DoctorController(IDoctorService doctorService)
+        public DoctorController(IDoctorService doctorService, IAppointmentService appointmentService)
         {
             _doctorService = doctorService;
+            _appointmentService = appointmentService;
         }
 
         [HttpPost]
@@ -50,6 +52,40 @@ namespace HospitalManagementSystem.WebAPI.Controllers
                 Success = true,
                 Data = doctor,
                 Message = "Doktor basariyla getirildi."
+            });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ResponseDto<List<DoctorDto>>>> GetAll()
+        {
+            var doctorList = await _doctorService.GetAllAsync();
+            if (doctorList == null)
+            {
+                return NotFound(new ResponseDto<DoctorDto>
+                {
+                    Success = false,
+                    Message = "Kayitli doktor bulunamadi."
+                });
+            }
+            return Ok(new ResponseDto<List<DoctorDto>>
+            {
+                Success = true,
+                Data = doctorList,
+                Message = "Doktorlar basariyla getirildi."
+            });
+        }
+
+        [HttpGet("{id}/available-slots")]
+        public async Task<ActionResult<ResponseDto<List<TimeSlotDto>>>> GetAvailableSlots(
+            long id,
+            [FromQuery] DateOnly date)
+        {
+            var availableTimeSlots = await _doctorService.GetAvailableTimeSlotsAsync(id, date);
+            return Ok(new ResponseDto<List<TimeSlotDto>>
+            {
+                Success = true,
+                Data = availableTimeSlots,
+                Message = "Zamanlar basariyla getirildi."
             });
         }
     }

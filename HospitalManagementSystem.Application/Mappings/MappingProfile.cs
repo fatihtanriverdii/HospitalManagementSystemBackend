@@ -14,7 +14,9 @@ namespace HospitalManagementSystem.Application.Mappings
 
             CreateMap<AppointmentCreateDto, Appointment>();
             CreateMap<Appointment, AppointmentCreateDto>();
-            CreateMap<Appointment, AppointmentDto>();
+            CreateMap<Appointment, AppointmentDto>()
+                .ForMember(dest => dest.Time,
+                            opt => opt.MapFrom(src => src.TimeSlot.Time));
 
             CreateMap<DoctorCreateDto, Doctor>();
             CreateMap<Doctor, DoctorCreateDto>();
@@ -25,6 +27,9 @@ namespace HospitalManagementSystem.Application.Mappings
 
             CreateMap<DepartmentCreateDto, Department>();
             CreateMap<Department, DepartmentCreateDto>();
+            CreateMap<Department, DepartmentDto>();
+
+            CreateMap<TimeSlot, TimeSlotDto>();
         }
     }
 }
