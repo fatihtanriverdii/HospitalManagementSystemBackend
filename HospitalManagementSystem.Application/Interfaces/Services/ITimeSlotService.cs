@@ -1,5 +1,4 @@
 ﻿using HospitalManagementSystem.Application.DTOs;
-using HospitalManagementSystem.Core.Entities;
 
 namespace HospitalManagementSystem.Application.Interfaces.Services
 {

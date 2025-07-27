@@ -4,7 +4,7 @@ using HospitalManagementSystem.Application.Interfaces.Services;
 using AutoMapper;
 using HospitalManagementSystem.Application.DTOs;
 
-namespace HospitalManagementSystem.Infrastructure.Services
+namespace HospitalManagementSystem.Application.Services
 {
 	public class EfDepartmentService : IDepartmentService
 	{

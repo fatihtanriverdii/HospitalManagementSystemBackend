@@ -2,7 +2,7 @@
 using HospitalManagementSystem.Core.Interfaces.Repositories;
 using HospitalManagementSystem.Application.Interfaces.Services;
 
-namespace HospitalManagementSystem.Infrastructure.Services
+namespace HospitalManagementSystem.Application.Services
 {
 	public class EfUserService : IUserService
 	{

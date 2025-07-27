@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using HospitalManagementSystem.Application.DTOs;
 using HospitalManagementSystem.Application.Interfaces.Services;
-using HospitalManagementSystem.Core.Entities;
 using HospitalManagementSystem.Core.Interfaces.Repositories;
 
 namespace HospitalManagementSystem.Application.Services

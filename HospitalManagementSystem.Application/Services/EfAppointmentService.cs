@@ -5,7 +5,7 @@ using HospitalManagementSystem.Application.DTOs;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
-namespace HospitalManagementSystem.Infrastructure.Services
+namespace HospitalManagementSystem.Application.Services
 {
 	public class EfAppointmentService : IAppointmentService
 	{
