@@ -2,18 +2,21 @@ using HospitalManagementSystem.Core.Interfaces.Repositories;
 using HospitalManagementSystem.Application.Interfaces.Services;
 using HospitalManagementSystem.Infrastructure.Data;
 using HospitalManagementSystem.Infrastructure.Repositories;
-using HospitalManagementSystem.Infrastructure.Services;
+using HospitalManagementSystem.Application.Services;
 using Microsoft.EntityFrameworkCore;
 using HospitalManagementSystem.Application.Mappings;
 using FluentValidation.AspNetCore;
 using HospitalManagementSystem.Application.Validators;
-using HospitalManagementSystem.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+//Validator
+builder.Services.AddControllers()
+                    .AddFluentValidation(fv =>
+                    fv.RegisterValidatorsFromAssemblyContaining<PatientCreateValidator>()
+                );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -56,11 +59,6 @@ builder.Services.AddScoped<ITimeSlotService, EfTimeSlotService>();
 // Automapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-//Validator
-builder.Services.AddControllers()
-                .AddFluentValidation(fv =>
-                    fv.RegisterValidatorsFromAssemblyContaining<PatientCreateValidator>()
-                );
 
 var app = builder.Build();
 

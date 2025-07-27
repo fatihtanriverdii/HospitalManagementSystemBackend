@@ -48,7 +48,6 @@ namespace HospitalManagementSystem.WebAPI.Controllers
                     Message = "Doktor musait degil."
                 });
             }
-            Console.WriteLine(conflick);
 
             var app = await _appointmentService.CreateAsync(appointmentCreateDto);
 

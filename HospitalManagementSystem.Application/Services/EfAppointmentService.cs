@@ -14,9 +14,9 @@ namespace HospitalManagementSystem.Application.Services
 		private readonly ITimeSlotService _timeSlotService;
 		private readonly IMapper _mapper;
 
-		public EfAppointmentService(IAppointmentRepository registrationRepo, IPatientService patientService, ITimeSlotService timeSlotService, IMapper mapper)
+		public EfAppointmentService(IAppointmentRepository appointmentRepo, IPatientService patientService, ITimeSlotService timeSlotService, IMapper mapper)
 		{
-            _appointmentRepo = registrationRepo;
+            _appointmentRepo = appointmentRepo;
 			_patientService = patientService;
 			_timeSlotService = timeSlotService;
 			_mapper = mapper;
