@@ -3,6 +3,7 @@ using HospitalManagementSystem.Core.Interfaces.Repositories;
 using HospitalManagementSystem.Application.Interfaces.Services;
 using AutoMapper;
 using HospitalManagementSystem.Application.DTOs;
+using HospitalManagementSystem.Shared.Exceptions;
 
 namespace HospitalManagementSystem.Application.Services
 {
@@ -28,7 +29,7 @@ namespace HospitalManagementSystem.Application.Services
 			var department = await _departmentRepo.GetByIdAsync(id);
 			if (department == null)
 			{
-				throw new KeyNotFoundException("Department not found");
+				throw new NotFoundException("Department not found");
 			}
 			_departmentRepo.Delete(department);
 			await _departmentRepo.SaveChangesAsync();
@@ -37,8 +38,6 @@ namespace HospitalManagementSystem.Application.Services
 		public async Task<List<DepartmentDto>> GetAllAsync()
 		{
 			var departments = await _departmentRepo.ListAllAsync();
-			if (departments == null)
-				return null;
 			return _mapper.Map<List<DepartmentDto>>(departments);
 		}
 

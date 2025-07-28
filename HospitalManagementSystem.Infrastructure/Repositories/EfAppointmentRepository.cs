@@ -14,9 +14,9 @@ namespace HospitalManagementSystem.Infrastructure.Repositories
 			_context = context;
 		}
 
-		public async Task AddAsync(Appointment registration)
+		public async Task AddAsync(Appointment appointment)
 		{
-			await _context.Appointments.AddAsync(registration);
+			await _context.Appointments.AddAsync(appointment);
 		}
 
 		public async Task<Appointment> GetByIdAsync(long id)

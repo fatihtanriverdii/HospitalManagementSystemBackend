@@ -4,6 +4,8 @@ using HospitalManagementSystem.Application.Interfaces.Services;
 using HospitalManagementSystem.Application.DTOs;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using HospitalManagementSystem.Shared.Exceptions;
+using HospitalManagementSystem.Shared.DTOs.Paging;
 
 namespace HospitalManagementSystem.Application.Services
 {
@@ -29,7 +31,7 @@ namespace HospitalManagementSystem.Application.Services
 			var slot = await _timeSlotService.GetByTimeAsync(appointmentCreateDto.Time);
 
 			if (slot == null)
-				throw new Exception("Girilen saate ait TimeSlot bulunamadi.");
+				throw new NotFoundException("Girilen saate ait TimeSlot bulunamadi.");
 
 			appointment.TimeSlotId = slot.Id;
 
@@ -39,9 +41,10 @@ namespace HospitalManagementSystem.Application.Services
 			return _mapper.Map<AppointmentDto>(appointment);
 		}
 
-		public async Task<IEnumerable<Appointment>> GetAllAsync()
+		public async Task<List<AppointmentDto>> GetAllAsync()
 		{
-			return await _appointmentRepo.ListAllAsync();
+			var appList = await _appointmentRepo.ListAllAsync();
+			return _mapper.Map<List<AppointmentDto>>(appList);
 		}
 
 		public async Task<List<AppointmentDto>> GetAllByDoctorAndDateAsync(long id, DateOnly dateOnly)
@@ -68,17 +71,25 @@ namespace HospitalManagementSystem.Application.Services
 		public async Task<List<AppointmentDto>> GetAllByPatientIdAsync(long id)
 		{
 			var appList = await _appointmentRepo.ListAllByPatientIdAsync(id);
-
 			return _mapper.Map<List<AppointmentDto>>(appList);
 		}
 
-		public async Task<List<AppointmentHistoryDto>> GetAllPatientHistoryAsync(long patientId)
+		public async Task<PagedResponseDto<AppointmentHistoryDto>> GetAllPatientHistoryAsync(long patientId, int pageNumber, int pageSize)
 		{
 			var query = _appointmentRepo
 				.QueryByPatient(patientId)
 				.Include(a => a.Doctor)
 					.ThenInclude(d => d.Department)
 				.Include(a => a.TimeSlot)
+				.OrderByDescending(a => a.Date)
+				.ThenBy(a => a.TimeSlot.Time)
+				.AsNoTracking();
+
+			var totalCount = await query.CountAsync();
+
+			var data = await query
+				.Skip((pageNumber - 1) * pageSize)
+				.Take(pageSize)
 				.Select(a => new AppointmentHistoryDto
 				{
 					DoctorName = a.Doctor.Name,
@@ -87,10 +98,16 @@ namespace HospitalManagementSystem.Application.Services
 					Date = a.Date,
 					Time = a.TimeSlot.Time
 				})
-				.OrderByDescending(a => a.Date)
-				.ThenBy(a => a.Time);
+				.ToListAsync();
 
-			return await query.ToListAsync();
+
+			return new PagedResponseDto<AppointmentHistoryDto>
+			{
+				Items = data,
+				PageNumber = pageNumber,
+				PageSize = pageSize,
+				TotalCount = totalCount
+			};
 		}
 
 		public async Task<IEnumerable<Appointment>> GetAllByPatientAsync(string tc)
@@ -102,8 +119,6 @@ namespace HospitalManagementSystem.Application.Services
 		public async Task<AppointmentDto> GetByIdAsync(long id)
 		{
 			var app = await _appointmentRepo.GetByIdAsync(id);
-			if (app == null)
-				return null;
             return _mapper.Map<AppointmentDto>(app); 
 		}
 	}

@@ -1,7 +1,8 @@
-﻿using HospitalManagementSystem.Application.Common.DTOs;
+﻿using HospitalManagementSystem.Shared.DTOs;
 using HospitalManagementSystem.Application.DTOs;
 using HospitalManagementSystem.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
+using HospitalManagementSystem.Shared.DTOs.Paging;
 
 namespace HospitalManagementSystem.WebAPI.Controllers
 {
@@ -83,24 +84,17 @@ namespace HospitalManagementSystem.WebAPI.Controllers
         }
 
         [HttpGet("patient/{patientId}")]
-        public async Task<ActionResult<ResponseDto<List<AppointmentHistoryDto>>>> GetByPatientId(long patientId)
+        public async Task<ActionResult<ResponseDto<PagedResponseDto<AppointmentHistoryDto>>>> GetByPatientId(long patientId, [FromQuery] PaginationParams paginationParams)
         {
-            var histories = await _appointmentService.GetAllPatientHistoryAsync(patientId);
-
-            if (!histories.Any())
-            {
-                return NotFound(new ResponseDto<AppointmentHistoryDto>
-                {
-                    Success = false,
-                    Message = "Kayitlar bulunamadi."
-                });
-            }
+            var pagedResult = await _appointmentService.GetAllPatientHistoryAsync(patientId, paginationParams.PageNumber, paginationParams.PageSize);
                 
-            return Ok(new ResponseDto<List<AppointmentHistoryDto>>
+            return Ok(new ResponseDto<PagedResponseDto<AppointmentHistoryDto>>
             {
-                Success = true,
-                Data = histories,
-                Message = "Kayitlar basariyla getirildi." 
+                Success = pagedResult.Items.Any(),
+                Data = pagedResult,
+                Message = pagedResult.Items.Any()
+                    ? "Kayitlar basariyla getirildi."
+                    : "Kayit bulunamadi."
             });
         }
     }

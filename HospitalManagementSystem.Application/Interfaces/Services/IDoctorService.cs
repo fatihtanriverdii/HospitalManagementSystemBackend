@@ -7,7 +7,6 @@ namespace HospitalManagementSystem.Application.Interfaces.Services
 	{
 		Task<DoctorDto> GetByIdAsync(long id);
         Task<List<DoctorDto>> GetAllAsync();
-		Task<IEnumerable<Doctor>> GetByDepartmentAsync(long departmentId);
 		Task<DoctorDto> CreateAsync(DoctorCreateDto doctorCreateDto);
         Task UpdateAsync(Doctor doctor);
 		Task<List<TimeSlotDto>> GetAvailableTimeSlotsAsync(long doctorId, DateOnly date);

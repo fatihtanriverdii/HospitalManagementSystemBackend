@@ -1,4 +1,4 @@
-﻿using HospitalManagementSystem.Application.Common.DTOs;
+﻿using HospitalManagementSystem.Shared.DTOs;
 using HospitalManagementSystem.Application.DTOs;
 using HospitalManagementSystem.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;

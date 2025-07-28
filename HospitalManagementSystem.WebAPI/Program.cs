@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using HospitalManagementSystem.Application.Mappings;
 using FluentValidation.AspNetCore;
 using HospitalManagementSystem.Application.Validators;
+using HospitalManagementSystem.Infrastructure.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +62,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
 var app = builder.Build();
+
+app.UseGlobalExceptionHandling();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

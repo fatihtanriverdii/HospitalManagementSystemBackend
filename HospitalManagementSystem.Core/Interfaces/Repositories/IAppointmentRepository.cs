@@ -6,7 +6,7 @@ namespace HospitalManagementSystem.Core.Interfaces.Repositories
 	{
 		Task<Appointment> GetByIdAsync(long id);
 		Task<IEnumerable<Appointment>> ListAllAsync();
-		Task AddAsync(Appointment registration);
+		Task AddAsync(Appointment appointment);
 		Task<List<Appointment>> ListAllByPatientIdAsync(long patientId);
 		IQueryable<Appointment> QueryByPatient(long patientId);
         Task<List<Appointment>> ListAllByDoctorAndDateAsync(long doctorId, DateOnly dateOnly);

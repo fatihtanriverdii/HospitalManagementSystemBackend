@@ -1,4 +1,4 @@
-﻿namespace HospitalManagementSystem.Application.Common.DTOs
+﻿namespace HospitalManagementSystem.Shared.DTOs
 {
     public class ResponseDto<T>
     {

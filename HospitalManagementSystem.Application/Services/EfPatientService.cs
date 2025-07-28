@@ -3,6 +3,7 @@ using HospitalManagementSystem.Core.Interfaces.Repositories;
 using HospitalManagementSystem.Application.Interfaces.Services;
 using HospitalManagementSystem.Application.DTOs;
 using AutoMapper;
+using HospitalManagementSystem.Shared.Exceptions;
 
 namespace HospitalManagementSystem.Application.Services
 {
@@ -21,7 +22,7 @@ namespace HospitalManagementSystem.Application.Services
 		{
 			if(await CheckTCExistAsync(patientCreateDto.TC))
 			{
-				return null;
+				throw new DuplicateResourceException("Patient already exist.");
 			}
 
 			Patient patient = _mapper.Map<Patient>(patientCreateDto);
@@ -36,7 +37,7 @@ namespace HospitalManagementSystem.Application.Services
 			var patient = await _patientRepo.GetByIdAsync(id);
 			if (patient == null)
 			{
-				throw new KeyNotFoundException("Patient not found");
+				throw new NotFoundException("Patient not found");
 			}
 			_patientRepo.Delete(patient);
 			await _patientRepo.SaveChangesAsync();
@@ -45,25 +46,19 @@ namespace HospitalManagementSystem.Application.Services
 		public async Task<List<PatientDto>> GetAllAsync()
 		{
 			var patientList = await _patientRepo.ListAllAsync();
-			if (patientList == null)
-				return null;
-			var patientsDto = _mapper.Map<List<PatientDto>>(patientList);
-			return patientsDto;
+
+			return _mapper.Map<List<PatientDto>>(patientList);
 		}
 
 		public async Task<PatientDto> GetByIdAsync(long id)
 		{
 			var patient = await _patientRepo.GetByIdAsync(id);
-			if (patient == null)
-				return null;
 			return _mapper.Map<PatientDto>(patient);
 		}
 
 		public async Task<PatientDto> GetByTCAsync(string tc)
 		{
 			var patient = await _patientRepo.GetByTCAsync(tc);
-            if (patient == null)
-                return null;
             return _mapper.Map<PatientDto>(patient);
         }
 

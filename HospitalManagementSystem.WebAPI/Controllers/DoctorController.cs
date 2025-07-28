@@ -1,4 +1,4 @@
-﻿using HospitalManagementSystem.Application.Common.DTOs;
+﻿using HospitalManagementSystem.Shared.DTOs;
 using HospitalManagementSystem.Application.DTOs;
 using HospitalManagementSystem.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -59,19 +59,14 @@ namespace HospitalManagementSystem.WebAPI.Controllers
         public async Task<ActionResult<ResponseDto<List<DoctorDto>>>> GetAll()
         {
             var doctorList = await _doctorService.GetAllAsync();
-            if (doctorList == null)
-            {
-                return NotFound(new ResponseDto<DoctorDto>
-                {
-                    Success = false,
-                    Message = "Kayitli doktor bulunamadi."
-                });
-            }
+
             return Ok(new ResponseDto<List<DoctorDto>>
             {
                 Success = true,
                 Data = doctorList,
-                Message = "Doktorlar basariyla getirildi."
+                Message = doctorList.Any()
+                    ? "Doktorlar basariyla getirildi."
+                    : "Kayitli doktor bulunamadi."
             });
         }
 

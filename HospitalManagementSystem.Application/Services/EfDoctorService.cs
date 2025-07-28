@@ -3,6 +3,7 @@ using HospitalManagementSystem.Core.Interfaces.Repositories;
 using HospitalManagementSystem.Application.Interfaces.Services;
 using HospitalManagementSystem.Application.DTOs;
 using AutoMapper;
+using HospitalManagementSystem.Shared.Exceptions;
 
 namespace HospitalManagementSystem.Application.Services
 {
@@ -35,7 +36,7 @@ namespace HospitalManagementSystem.Application.Services
 			var doctor = await _doctorRepo.GetByIdAsync(id);
 			if (doctor == null)
 			{
-				throw new KeyNotFoundException("Doctor not found");
+				throw new NotFoundException("Doctor not found");
 			}
 			_doctorRepo.Delete(doctor);
 			await _doctorRepo.SaveChangesAsync();
@@ -44,14 +45,7 @@ namespace HospitalManagementSystem.Application.Services
 		public async Task<List<DoctorDto>> GetAllAsync()
 		{
 			var doctors = await _doctorRepo.ListAllAsync();
-			if (doctors == null)
-				return null;
 			return _mapper.Map<List<DoctorDto>>(doctors);
-		}
-
-		public async Task<IEnumerable<Doctor>> GetByDepartmentAsync(long departmentId)
-		{
-			return await _doctorRepo.ListByDepartmentAsync(departmentId);
 		}
 
 		public async Task<List<TimeSlotDto>> GetAvailableTimeSlotsAsync(long doctorId, DateOnly date)
@@ -84,8 +78,6 @@ namespace HospitalManagementSystem.Application.Services
 		public async Task<DoctorDto> GetByIdAsync(long id)
 		{
 			var doctor = await _doctorRepo.GetByIdAsync(id);
-			if (doctor == null)
-				return null;
 			return _mapper.Map<DoctorDto>(doctor);
 		}
 
