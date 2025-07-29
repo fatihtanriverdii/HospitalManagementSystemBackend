@@ -2,6 +2,7 @@
 using HospitalManagementSystem.Application.DTOs;
 using HospitalManagementSystem.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
+using HospitalManagementSystem.Shared.DTOs.Paging;
 
 namespace HospitalManagementSystem.WebAPI.Controllers
 {
@@ -27,6 +28,21 @@ namespace HospitalManagementSystem.WebAPI.Controllers
                 Data = departmentList,
                 Message = departmentList.Any()
                     ? "Departmanlar basariyla getirildi." 
+                    : "Kayitli departman bulunamadi."
+            });
+        }
+
+        [HttpGet("pagination")]
+        public async Task<ActionResult<ResponseDto<PagedResponseDto<DepartmentDto>>>> GetAllWithPagination([FromQuery] PaginationParams paginationParams)
+        {
+            var pagedResult = await _departmentService.GetAllWithPagination(paginationParams.PageNumber, paginationParams.PageSize);
+
+            return Ok(new ResponseDto<PagedResponseDto<DepartmentDto>>
+            {
+                Success = pagedResult.Items.Any(),
+                Data = pagedResult,
+                Message = pagedResult.Items.Any()
+                    ? "Departmanlar basariyla getirtildi."
                     : "Kayitli departman bulunamadi."
             });
         }

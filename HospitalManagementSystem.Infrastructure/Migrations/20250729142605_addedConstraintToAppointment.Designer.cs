@@ -3,6 +3,7 @@ using System;
 using HospitalManagementSystem.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HospitalManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class HospitalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250729142605_addedConstraintToAppointment")]
+    partial class addedConstraintToAppointment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -399,6 +402,34 @@ namespace HospitalManagementSystem.Infrastructure.Migrations
                     b.ToTable("Doctors");
                 });
 
+            modelBuilder.Entity("HospitalManagementSystem.Core.Entities.DoctorWorkingHour", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("DoctorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("interval");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("interval");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId", "DayOfWeek")
+                        .IsUnique();
+
+                    b.ToTable("DoctorWorkingHour");
+                });
+
             modelBuilder.Entity("HospitalManagementSystem.Core.Entities.Patient", b =>
                 {
                     b.Property<long>("Id")
@@ -625,6 +656,17 @@ namespace HospitalManagementSystem.Infrastructure.Migrations
                     b.Navigation("Department");
                 });
 
+            modelBuilder.Entity("HospitalManagementSystem.Core.Entities.DoctorWorkingHour", b =>
+                {
+                    b.HasOne("HospitalManagementSystem.Core.Entities.Doctor", "Doctor")
+                        .WithMany("WorkHours")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+                });
+
             modelBuilder.Entity("HospitalManagementSystem.Core.Entities.Department", b =>
                 {
                     b.Navigation("Doctors");
@@ -633,6 +675,8 @@ namespace HospitalManagementSystem.Infrastructure.Migrations
             modelBuilder.Entity("HospitalManagementSystem.Core.Entities.Doctor", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("WorkHours");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Core.Entities.Patient", b =>

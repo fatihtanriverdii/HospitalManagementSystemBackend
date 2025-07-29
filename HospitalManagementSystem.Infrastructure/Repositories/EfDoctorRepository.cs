@@ -34,6 +34,22 @@ namespace HospitalManagementSystem.Infrastructure.Repositories
 			return await _context.Doctors.ToListAsync();
 		}
 
+		public async Task<List<Doctor>> ListAllWithPagination(int pageNumber, int pageSize)
+		{
+			return await _context.Doctors
+							.OrderBy(d => d.Name)
+							.Include(d => d.Department)
+							.Skip((pageNumber - 1) * pageSize)
+							.Take(pageSize)
+							.AsNoTracking()
+							.ToListAsync();
+		}
+
+		public async Task<int> GetCountAsync()
+		{
+			return await _context.Doctors .CountAsync();
+		}
+
 		public async Task<IEnumerable<Doctor>> ListByDepartmentAsync(long departmentId)
 		{
 			return await _context.Doctors

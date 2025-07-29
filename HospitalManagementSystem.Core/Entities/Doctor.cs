@@ -15,7 +15,6 @@ namespace HospitalManagementSystem.Core.Entities
 		public long DepartmentId { get; set; }
 		public Department Department { get; set; } = null!;
 
-		public ICollection<DoctorWorkingHour> WorkHours { get; set; } = new List<DoctorWorkingHour>();
 		public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 	}
 }

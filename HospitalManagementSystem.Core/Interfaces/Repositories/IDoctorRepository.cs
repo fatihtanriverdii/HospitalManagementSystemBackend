@@ -6,11 +6,12 @@ namespace HospitalManagementSystem.Core.Interfaces.Repositories
 	{
 		Task<Doctor> GetByIdAsync(long id);
 		Task<IEnumerable<Doctor>> ListAllAsync();
-		Task AddAsync(Doctor doctor);
+		Task<List<Doctor>> ListAllWithPagination(int pageNumber, int pageSize);
+		Task<int> GetCountAsync();
+        Task AddAsync(Doctor doctor);
 		void Update(Doctor doctor);
 		void Delete(Doctor doctor);
 		Task<List<TimeSlot>> ListAvailableTimeSlotsAsync(List<TimeSlot> busySlots);
-
         Task<IEnumerable<Doctor>> ListByDepartmentAsync(long departmentId);
         Task<long> SaveChangesAsync();
     }

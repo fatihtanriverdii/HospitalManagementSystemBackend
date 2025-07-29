@@ -14,7 +14,8 @@ namespace HospitalManagementSystem.Infrastructure.Data
         public DbSet<TimeSlot> TimeSlots { get; set; } = null!;
 		public DbSet<User> Users { get; set; } = null!;
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        [Obsolete]
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
 
@@ -24,17 +25,6 @@ namespace HospitalManagementSystem.Infrastructure.Data
 				.WithMany(dep => dep.Doctors)
 				.HasForeignKey(d => d.DepartmentId);
 
-            //Doctor - WorkingHour
-            modelBuilder.Entity<Doctor>()
-                .HasMany(d => d.WorkHours)
-                .WithOne(w => w.Doctor)
-                .HasForeignKey(w => w.DoctorId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            //Doktorun aynı güne ait sadece bir kayıt olmasi icin
-            modelBuilder.Entity<DoctorWorkingHour>()
-                .HasIndex(w => new { w.DoctorId, w.DayOfWeek })
-                .IsUnique();
 
             //Department
             modelBuilder.Entity<Department>()
@@ -116,6 +106,11 @@ namespace HospitalManagementSystem.Infrastructure.Data
                 .Property(a => a.Status)
                 .HasConversion<string>()
                 .HasMaxLength(20);
+            modelBuilder.Entity<Appointment>()
+                .HasCheckConstraint(
+                    name: "CHK_Appointment_Date_Range",
+                    sql: "\"Date\" >= CURRENT_DATE AND \"Date\" <= (CURRENT_DATE + INTERVAL '1 month')"
+                );
 
             //TimeSlot
             modelBuilder.Entity<TimeSlot>()

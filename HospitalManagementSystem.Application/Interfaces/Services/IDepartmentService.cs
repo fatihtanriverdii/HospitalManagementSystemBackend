@@ -1,5 +1,6 @@
 ﻿using HospitalManagementSystem.Application.DTOs;
 using HospitalManagementSystem.Core.Entities;
+using HospitalManagementSystem.Shared.DTOs.Paging;
 
 namespace HospitalManagementSystem.Application.Interfaces.Services
 {
@@ -7,7 +8,8 @@ namespace HospitalManagementSystem.Application.Interfaces.Services
 	{
 		Task<DepartmentDto> GetByIdAsync(long id);
 		Task<List<DepartmentDto>> GetAllAsync();
-		Task CreateAsync(Department department);
+		Task<PagedResponseDto<DepartmentDto>> GetAllWithPagination(int pageNumber, int pageSize);
+        Task CreateAsync(Department department);
 		Task UpdateAsync(Department department);
 		Task DeleteAsync(long id);
 	}

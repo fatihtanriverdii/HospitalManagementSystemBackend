@@ -20,7 +20,9 @@ namespace HospitalManagementSystem.Application.Mappings
 
             CreateMap<DoctorCreateDto, Doctor>();
             CreateMap<Doctor, DoctorCreateDto>();
-            CreateMap<Doctor, DoctorDto>();
+            CreateMap<Doctor, DoctorDto>()
+                .ForMember(dest => dest.DepartmentName,
+                            opt => opt.MapFrom(src => src.Department.Name));
 
             CreateMap<UserCreateDto, User>();
             CreateMap<User, UserCreateDto>();

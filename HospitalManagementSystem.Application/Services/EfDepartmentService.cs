@@ -4,6 +4,7 @@ using HospitalManagementSystem.Application.Interfaces.Services;
 using AutoMapper;
 using HospitalManagementSystem.Application.DTOs;
 using HospitalManagementSystem.Shared.Exceptions;
+using HospitalManagementSystem.Shared.DTOs.Paging;
 
 namespace HospitalManagementSystem.Application.Services
 {
@@ -39,6 +40,24 @@ namespace HospitalManagementSystem.Application.Services
 		{
 			var departments = await _departmentRepo.ListAllAsync();
 			return _mapper.Map<List<DepartmentDto>>(departments);
+		}
+
+		public async Task<PagedResponseDto<DepartmentDto>> GetAllWithPagination(int pageNumber, int pageSize)
+		{
+			var data = await _departmentRepo.ListAllWithPagination(pageNumber, pageSize);
+			var totalCount = await _departmentRepo.GetCountAsync();
+
+			var dtos = data
+				.Select(d => _mapper.Map<DepartmentDto>(d))
+				.ToList();
+
+			return new PagedResponseDto<DepartmentDto>
+			{
+				Items = dtos,
+				PageNumber = pageNumber,
+				PageSize = pageSize,
+				TotalCount = totalCount
+			};
 		}
 
 		public async Task<DepartmentDto> GetByIdAsync(long id)

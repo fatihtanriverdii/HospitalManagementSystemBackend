@@ -14,7 +14,9 @@ namespace HospitalManagementSystem.Application.Validators
                 .GreaterThan(0).WithMessage("Gecerli doktor secmelisiniz");
 
             RuleFor(x => x.Date)
-                .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now)).WithMessage("Kayit tarihi bugun veya bugunden sonraki bir tarih olmali");
+                .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now))
+                .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now).AddMonths(1))
+                .WithMessage("Kayit tarihi bugun veya bugunden sonraki bir tarih ve en fazla 1 ay sonra olmali");
 
             RuleFor(x => x.Time)
                 .InclusiveBetween(new TimeOnly(8,0), new TimeOnly(17,0))
