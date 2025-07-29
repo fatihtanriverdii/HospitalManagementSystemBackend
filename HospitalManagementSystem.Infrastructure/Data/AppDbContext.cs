@@ -14,7 +14,6 @@ namespace HospitalManagementSystem.Infrastructure.Data
         public DbSet<TimeSlot> TimeSlots { get; set; } = null!;
 		public DbSet<User> Users { get; set; } = null!;
 
-        [Obsolete]
         protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
